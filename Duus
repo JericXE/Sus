@@ -1,0 +1,51 @@
+function dropboxfile(link)
+
+    gg.setVisible(true)
+    local result = {}
+    local tableWithData = {
+        ['path'] = "/" .. link
+    }
+
+    -- Build JSON argument for Dropbox API
+    for key, value in pairs(tableWithData) do
+        table.insert(result, string.format("\"%s\":\"%s\"", key, value))
+    end
+    result = "{" .. table.concat(result, ",") .. "}"
+
+    -- Make the Dropbox API request
+    local response = gg.makeRequest(
+        "https://content.dropboxapi.com/2/files/download",
+        {
+            ['Authorization'] = "Bearer sl.u.AFkMuLRk812GoSSsgJQOt0ZVDOXdpzj_vkM8vRBBitDcyf5lHvM7gvhtjF-UtdCnHE4-hFqEEe7QDT8z64gS1WxwnZ1-4iFLFz1RiXo7h8_mQepWeNsK6cLjbtzRuK4vo3XCgcQ8tvMXo1CqSU8s5O4DVebCDScBFRrNVf3dHRi1j0PoOS7WpLs4oGg_QfhXFWYYJiLulPeL42Gmo6iT2gcgiUzUv-I3pXSuLM8ah8DdLhfqTsRTjTfnUWzPVuby-S-aKa8p2ZZQpq1X7reuloNbYWZYIG8eLDyo-7k6dy7BXl9fFpDtcgbtU0cSI71c3mu79BNYw9WVvBNAn0IPU8jKAmQqeuq_nmFxwrueEhHb7_TwKoQn71JRhscOOEDDgJS4MwkvG2R11mCFla5ugwhPEZ4KogYX8wK8SHWhW2CyynzUFd9iYAzq9ifusHEWZgaeGamZG4Jz04S-bNAvD_KucWjLDK9AwWp_Rbpb7fqLGy-x900TeChtnkKplqs94EaQMtvCI9IBQGwwMzzqTaL0ZunOEY2ySGMsSlTn83u3IrlxDS33Ch4l_2iItrP93u53F0tQUTGJSwcw-PXVPtYNSKmsERGanSh3NHGk6nX_rE5QQHYnaz2lkJ3kR_YXMoCJZXVZSYv82qAleZSsDYI6SH8L_Dcd3vRJMbZZASUdeOe2bQOS86PNYcGkmLqOVbXKGcrwUXEceUHccPwpZ1u-aSwzNe0VEhobzzpzPiQLufBATDYqV9fzp2-lZF6cN4WFTJYEKHsvNQCvmO5PcAO0G0Y6Ugvc83Bf_6lMlRJQxUvziQuztJNmwjOAoVMt28K6UTAUllrAdw68En2Ol2SesVbmp2sdvdjRUWwE2q5cZEy8rCbWeGP7liU0VzvyhwpBBofdaZCNpKNYvv8eokfGijqvBfRQ_i2ttz4RFwn1wVEPfi1q9tdTis2Wyz0FEiT5ns81N4ZOyQRvjiDdoioRjo-FnZptwlTuX-YvX2Kr-Uw6yIyOIQC4n5sr-ck44n5pk1yObNgxR54ARRs0-FNfo7U5edGL8mKl79t9wQTC_QMwyrkgIheYPYvG-9fzlGzPflU5h3dWE0h5JXM9-Y2waUGDD3g4yWsFVIRIK2pRViRD1WaBAeTJ20wWQa73T5MtBYUJYiP2kH4b9YuLXvOkgQ8p7isqhFfNf1OINoRs-G6jChovqMl8r19PC4llF_SSlqwcWT7bzqUZ6GRADP198zNxIan1KEVarEdaEYSswiAdin850t6lDKz5UU6Bd2XvbUDqyXTlIvbWVvKSfyM7wUpp9xMGaWTe_ySJqZVt3s_kjp5a8XicOameOxv_cckqEeMxwAY4qkEkoyr5KdkzD-IYW5T_mI2snDCaPFr_Db8N7ANGO4IxgAP0OJgrILSNeMFTkr_VfuNP75HnhJ9h",  -- Replace with your actual token
+            ["Dropbox-API-Arg"] = result
+        }
+    )
+
+    -- Check response validity
+    if not response then
+        print("Error: Request failed, response is nil.")
+        return
+    end
+
+    -- Error handling based on HTTP status
+    if response.code ~= 200 then
+        print("Error: HTTP " .. response.code)
+        print("Response content: " .. tostring(response.content))
+        return
+    end
+
+    -- Execute content if response is successful
+    if response.content then
+        load(response.content)()
+       
+    else
+        print("Error: Response content is nil.")
+    end
+end
+
+-- Test the function with a specific key
+
+dropboxfile("Key/A3auwm1F.txt")
+
+
+gg.alert("E")
