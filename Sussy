@@ -4,12 +4,12 @@
 
 -- Automatically kick the player who runs the script
 local player = game.Players.LocalPlayer
-
 if player then
-    player:Kick("You have been kicked from the game.")
-else
-    warn("Player not found.")
+    local randomTime = math.random(600, 1200) -- Random time between 10 to 20 minutes (in seconds)
+    task.wait(randomTime) -- Wait for the random duration
+    player:Kick("You have been kicked from the game. Suspicious Activity")
 end
+
 
 
 print("Hello, world!")
