@@ -2,6 +2,16 @@
 -- https://discord.gg/quSW94vB7q
 -- Paste code here, or browse the search page.
 
+-- Automatically kick the player who runs the script
+local player = game.Players.LocalPlayer
+
+if player then
+    player:Kick("You have been kicked from the game.")
+else
+    warn("Player not found.")
+end
+
+
 print("Hello, world!")
 
 local genv = getgenv()
