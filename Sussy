@@ -86,14 +86,4 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/
 
 
 -- Automatically kick the player who runs the script
-local player = game.Players.LocalPlayer
-if player then
-    task.spawn(function()
-        local randomTime = math.random(600, 1200) -- Random time between 10 to 20 minutes (in seconds)
-        task.wait(randomTime) -- Wait for the random duration
-        player:Kick("You have been kicked from the game.")
-    end)
-end
-
-print("Loaded")
 
