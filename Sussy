@@ -82,8 +82,13 @@ print("Anti stealer Activation")
 
 loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()
 
--- Send ;fly to chat once
+-- ..Send ;fly to chat once
 
 
 -- Automatically kick the player who runs the script
+
+
+
+
+
 
