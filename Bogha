@@ -4,6 +4,7 @@ local network = replicatedStorage:WaitForChild("Network")
 
 local purchaseEvent = network:WaitForChild("Merchant_RequestPurchase")
 local teleportEvent = network:WaitForChild("Teleports_RequestInstanceTeleport")
+local autoMineEvent = network:WaitForChild("AutoMine_Enable")
 
 -- GUI Setup
 local screenGui = Instance.new("ScreenGui")
@@ -46,6 +47,14 @@ sliderBar.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
 sliderBar.ZIndex = 0.5
 sliderBar.Parent = slider
 
+local timeRemainingLabel = Instance.new("TextLabel")
+timeRemainingLabel.Size = UDim2.new(1, 0, 0.2, 0)
+timeRemainingLabel.Position = UDim2.new(0, 0, 0.8, 0)
+timeRemainingLabel.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+timeRemainingLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+timeRemainingLabel.Text = "Time Remaining: 0s"
+timeRemainingLabel.Parent = frame
+
 local isAutoMerchantEnabled = false
 local sessionDuration = 180 -- Default to 3 minutes (in seconds)
 local currentThread
@@ -81,17 +90,6 @@ slider.MouseButton1Down:Connect(function()
     end)
 end)
 
-local function teleportTo(zone, position)
-    teleportEvent:InvokeServer(zone)
-    wait(2)
-    if player and player.Character then
-        local humanoidRootPart = player.Character:FindFirstChild("HumanoidRootPart")
-        if humanoidRootPart then
-            humanoidRootPart.CFrame = position
-        end
-    end
-end
-
 toggleButton.MouseButton1Click:Connect(function()
     if isAutoMerchantEnabled then
         isAutoMerchantEnabled = false
@@ -112,7 +110,15 @@ toggleButton.MouseButton1Click:Connect(function()
     
     currentThread = task.spawn(function()
         while isAutoMerchantEnabled do
-            teleportTo("__Zone_8", CFrame.new(20713.64, 17.65, -19869.01))
+            -- First teleport location
+            if player and player.Character then
+                local humanoidRootPart = player.Character:FindFirstChild("HumanoidRootPart")
+                if humanoidRootPart then
+                    humanoidRootPart.CFrame = CFrame.new(20713.64, 17.65, -19869.01)
+                end
+            end
+            
+            autoMineEvent:FireServer(false)
             
             for i = 1, 6 do
                 for _ = 1, 3 do
@@ -121,10 +127,23 @@ toggleButton.MouseButton1Click:Connect(function()
                 end
             end
             
-            teleportTo("__Zone_7", CFrame.new(20740.89, -31.16, -12797.05))
+            -- Second teleport location
+            if player and player.Character then
+                local humanoidRootPart = player.Character:FindFirstChild("HumanoidRootPart")
+                if humanoidRootPart then
+                    humanoidRootPart.CFrame = CFrame.new(20614.04, 7.76, -19829.09)
+                end
+            end
+            
+            -- No teleport to world 7, just enable auto mining
+            autoMineEvent:FireServer(true)
             local startTime = tick()
             
             while isAutoMerchantEnabled and tick() - startTime < sessionDuration do
+                local remainingTime = math.max(0, sessionDuration - (tick() - startTime))
+                local minutes = math.floor(remainingTime / 60)
+                local seconds = remainingTime % 60
+                timeRemainingLabel.Text = string.format("Time Remaining: %dm %ds", minutes, seconds)
                 wait(1)
             end
         end
