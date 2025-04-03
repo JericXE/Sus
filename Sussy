@@ -2,15 +2,6 @@
 -- https://discord.gg/quSW94vB7q
 -- Paste code here, or browse the search page.
 
-local player = game.Players.LocalPlayer
-if player then
-    task.spawn(function()
-        local randomTime = math.random(600, 1200) -- Random time between 10 to 20 minutes (in seconds)
-        task.wait(randomTime) -- Wait for the random duration
-        player:Kick(Suspicious Activity")
-    end)
-end
-
 print("Loaded")
 
 
